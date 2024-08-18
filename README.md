@@ -1,4 +1,4 @@
-These is an R script and associated support files to publish daily charts for a given MLB team to bluesky
+This is an R script and associated support files to publish daily charts for a given MLB team to bluesky
 
 Data is pulled via MLB API
 
