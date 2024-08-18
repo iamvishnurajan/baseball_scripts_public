@@ -1,0 +1,123 @@
+"season","date","game.gamePk","isHome","inningLabel","team.name","team.id","opponent.name","opponent.id"
+"2024","2024-03-29",745604,TRUE,"bottom","Philadelphia Phillies",143,"Atlanta Braves",144
+"2024","2024-03-30",745599,TRUE,"bottom","Philadelphia Phillies",143,"Atlanta Braves",144
+"2024","2024-03-31",745602,TRUE,"bottom","Philadelphia Phillies",143,"Atlanta Braves",144
+"2024","2024-04-01",745600,TRUE,"bottom","Philadelphia Phillies",143,"Cincinnati Reds",113
+"2024","2024-04-02",745598,TRUE,"bottom","Philadelphia Phillies",143,"Cincinnati Reds",113
+"2024","2024-04-03",745603,TRUE,"bottom","Philadelphia Phillies",143,"Cincinnati Reds",113
+"2024","2024-04-05",744874,FALSE,"top","Philadelphia Phillies",143,"Washington Nationals",120
+"2024","2024-04-06",744873,FALSE,"top","Philadelphia Phillies",143,"Washington Nationals",120
+"2024","2024-04-07",744871,FALSE,"top","Philadelphia Phillies",143,"Washington Nationals",120
+"2024","2024-04-08",745194,FALSE,"top","Philadelphia Phillies",143,"St. Louis Cardinals",138
+"2024","2024-04-09",745195,FALSE,"top","Philadelphia Phillies",143,"St. Louis Cardinals",138
+"2024","2024-04-10",745196,FALSE,"top","Philadelphia Phillies",143,"St. Louis Cardinals",138
+"2024","2024-04-11",745601,TRUE,"bottom","Philadelphia Phillies",143,"Pittsburgh Pirates",134
+"2024","2024-04-12",745596,TRUE,"bottom","Philadelphia Phillies",143,"Pittsburgh Pirates",134
+"2024","2024-04-13",745594,TRUE,"bottom","Philadelphia Phillies",143,"Pittsburgh Pirates",134
+"2024","2024-04-14",745595,TRUE,"bottom","Philadelphia Phillies",143,"Pittsburgh Pirates",134
+"2024","2024-04-15",745597,TRUE,"bottom","Philadelphia Phillies",143,"Colorado Rockies",115
+"2024","2024-04-16",745593,TRUE,"bottom","Philadelphia Phillies",143,"Colorado Rockies",115
+"2024","2024-04-17",745591,TRUE,"bottom","Philadelphia Phillies",143,"Colorado Rockies",115
+"2024","2024-04-19",745592,TRUE,"bottom","Philadelphia Phillies",143,"Chicago White Sox",145
+"2024","2024-04-20",745590,TRUE,"bottom","Philadelphia Phillies",143,"Chicago White Sox",145
+"2024","2024-04-21",745588,TRUE,"bottom","Philadelphia Phillies",143,"Chicago White Sox",145
+"2024","2024-04-22",746723,FALSE,"top","Philadelphia Phillies",143,"Cincinnati Reds",113
+"2024","2024-04-23",746722,FALSE,"top","Philadelphia Phillies",143,"Cincinnati Reds",113
+"2024","2024-04-24",746725,FALSE,"top","Philadelphia Phillies",143,"Cincinnati Reds",113
+"2024","2024-04-25",746724,FALSE,"top","Philadelphia Phillies",143,"Cincinnati Reds",113
+"2024","2024-04-26",745424,FALSE,"top","Philadelphia Phillies",143,"San Diego Padres",135
+"2024","2024-04-27",745425,FALSE,"top","Philadelphia Phillies",143,"San Diego Padres",135
+"2024","2024-04-28",745428,FALSE,"top","Philadelphia Phillies",143,"San Diego Padres",135
+"2024","2024-04-29",746236,FALSE,"top","Philadelphia Phillies",143,"Los Angeles Angels",108
+"2024","2024-04-30",746239,FALSE,"top","Philadelphia Phillies",143,"Los Angeles Angels",108
+"2024","2024-05-01",746238,FALSE,"top","Philadelphia Phillies",143,"Los Angeles Angels",108
+"2024","2024-05-03",745589,TRUE,"bottom","Philadelphia Phillies",143,"San Francisco Giants",137
+"2024","2024-05-04",745583,TRUE,"bottom","Philadelphia Phillies",143,"San Francisco Giants",137
+"2024","2024-05-05",745587,TRUE,"bottom","Philadelphia Phillies",143,"San Francisco Giants",137
+"2024","2024-05-06",745585,TRUE,"bottom","Philadelphia Phillies",143,"San Francisco Giants",137
+"2024","2024-05-07",745586,TRUE,"bottom","Philadelphia Phillies",143,"Toronto Blue Jays",141
+"2024","2024-05-08",745584,TRUE,"bottom","Philadelphia Phillies",143,"Toronto Blue Jays",141
+"2024","2024-05-10",746071,FALSE,"top","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-05-11",746069,FALSE,"top","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-05-12",746068,FALSE,"top","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-05-13",745826,FALSE,"top","Philadelphia Phillies",143,"New York Mets",121
+"2024","2024-05-14",745821,FALSE,"top","Philadelphia Phillies",143,"New York Mets",121
+"2024","2024-05-15",745582,TRUE,"bottom","Philadelphia Phillies",143,"New York Mets",121
+"2024","2024-05-16",745580,TRUE,"bottom","Philadelphia Phillies",143,"New York Mets",121
+"2024","2024-05-17",745579,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120
+"2024","2024-05-18",745581,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120
+"2024","2024-05-19",745577,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120
+"2024","2024-05-21",745578,TRUE,"bottom","Philadelphia Phillies",143,"Texas Rangers",140
+"2024","2024-05-22",745576,TRUE,"bottom","Philadelphia Phillies",143,"Texas Rangers",140
+"2024","2024-05-23",745573,TRUE,"bottom","Philadelphia Phillies",143,"Texas Rangers",140
+"2024","2024-05-24",746558,FALSE,"top","Philadelphia Phillies",143,"Colorado Rockies",115
+"2024","2024-05-25",746556,FALSE,"top","Philadelphia Phillies",143,"Colorado Rockies",115
+"2024","2024-05-26",746557,FALSE,"top","Philadelphia Phillies",143,"Colorado Rockies",115
+"2024","2024-05-27",745338,FALSE,"top","Philadelphia Phillies",143,"San Francisco Giants",137
+"2024","2024-05-28",745337,FALSE,"top","Philadelphia Phillies",143,"San Francisco Giants",137
+"2024","2024-05-29",745333,FALSE,"top","Philadelphia Phillies",143,"San Francisco Giants",137
+"2024","2024-05-31",745574,TRUE,"bottom","Philadelphia Phillies",143,"St. Louis Cardinals",138
+"2024","2024-06-01",745575,TRUE,"bottom","Philadelphia Phillies",143,"St. Louis Cardinals",138
+"2024","2024-06-02",745572,TRUE,"bottom","Philadelphia Phillies",143,"St. Louis Cardinals",138
+"2024","2024-06-03",745569,TRUE,"bottom","Philadelphia Phillies",143,"Milwaukee Brewers",158
+"2024","2024-06-04",745568,TRUE,"bottom","Philadelphia Phillies",143,"Milwaukee Brewers",158
+"2024","2024-06-05",745570,TRUE,"bottom","Philadelphia Phillies",143,"Milwaukee Brewers",158
+"2024","2024-06-08",745814,FALSE,"top","Philadelphia Phillies",143,"New York Mets",121
+"2024","2024-06-09",745571,TRUE,"bottom","Philadelphia Phillies",143,"New York Mets",121
+"2024","2024-06-11",746951,FALSE,"top","Philadelphia Phillies",143,"Boston Red Sox",111
+"2024","2024-06-12",746948,FALSE,"top","Philadelphia Phillies",143,"Boston Red Sox",111
+"2024","2024-06-13",746944,FALSE,"top","Philadelphia Phillies",143,"Boston Red Sox",111
+"2024","2024-06-14",747025,FALSE,"top","Philadelphia Phillies",143,"Baltimore Orioles",110
+"2024","2024-06-15",747024,FALSE,"top","Philadelphia Phillies",143,"Baltimore Orioles",110
+"2024","2024-06-16",747023,FALSE,"top","Philadelphia Phillies",143,"Baltimore Orioles",110
+"2024","2024-06-17",745567,TRUE,"bottom","Philadelphia Phillies",143,"San Diego Padres",135
+"2024","2024-06-18",745563,TRUE,"bottom","Philadelphia Phillies",143,"San Diego Padres",135
+"2024","2024-06-19",745561,TRUE,"bottom","Philadelphia Phillies",143,"San Diego Padres",135
+"2024","2024-06-21",745562,TRUE,"bottom","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2024","2024-06-22",745564,TRUE,"bottom","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2024","2024-06-23",745566,TRUE,"bottom","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2024","2024-06-24",746458,FALSE,"top","Philadelphia Phillies",143,"Detroit Tigers",116
+"2024","2024-06-25",746454,FALSE,"top","Philadelphia Phillies",143,"Detroit Tigers",116
+"2024","2024-06-26",746456,FALSE,"top","Philadelphia Phillies",143,"Detroit Tigers",116
+"2024","2024-06-27",745565,TRUE,"bottom","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-06-28",745560,TRUE,"bottom","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-06-29",745559,TRUE,"bottom","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-06-30",745555,TRUE,"bottom","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-07-02",746860,FALSE,"top","Philadelphia Phillies",143,"Chicago Cubs",112
+"2024","2024-07-03",746858,FALSE,"top","Philadelphia Phillies",143,"Chicago Cubs",112
+"2024","2024-07-04",746857,FALSE,"top","Philadelphia Phillies",143,"Chicago Cubs",112
+"2024","2024-07-05",747097,FALSE,"top","Philadelphia Phillies",143,"Atlanta Braves",144
+"2024","2024-07-06",747099,FALSE,"top","Philadelphia Phillies",143,"Atlanta Braves",144
+"2024","2024-07-07",747098,FALSE,"top","Philadelphia Phillies",143,"Atlanta Braves",144
+"2024","2024-07-09",745557,TRUE,"bottom","Philadelphia Phillies",143,"Los Angeles Dodgers",119
+"2024","2024-07-10",745556,TRUE,"bottom","Philadelphia Phillies",143,"Los Angeles Dodgers",119
+"2024","2024-07-11",745558,TRUE,"bottom","Philadelphia Phillies",143,"Los Angeles Dodgers",119
+"2024","2024-07-12",745552,TRUE,"bottom","Philadelphia Phillies",143,"Oakland Athletics",133
+"2024","2024-07-13",745549,TRUE,"bottom","Philadelphia Phillies",143,"Oakland Athletics",133
+"2024","2024-07-14",745551,TRUE,"bottom","Philadelphia Phillies",143,"Oakland Athletics",133
+"2024","2024-07-19",745481,FALSE,"top","Philadelphia Phillies",143,"Pittsburgh Pirates",134
+"2024","2024-07-20",745478,FALSE,"top","Philadelphia Phillies",143,"Pittsburgh Pirates",134
+"2024","2024-07-21",745470,FALSE,"top","Philadelphia Phillies",143,"Pittsburgh Pirates",134
+"2024","2024-07-22",745881,FALSE,"top","Philadelphia Phillies",143,"Minnesota Twins",142
+"2024","2024-07-23",745878,FALSE,"top","Philadelphia Phillies",143,"Minnesota Twins",142
+"2024","2024-07-24",745877,FALSE,"top","Philadelphia Phillies",143,"Minnesota Twins",142
+"2024","2024-07-26",745554,TRUE,"bottom","Philadelphia Phillies",143,"Cleveland Guardians",114
+"2024","2024-07-27",745553,TRUE,"bottom","Philadelphia Phillies",143,"Cleveland Guardians",114
+"2024","2024-07-28",745550,TRUE,"bottom","Philadelphia Phillies",143,"Cleveland Guardians",114
+"2024","2024-07-29",745547,TRUE,"bottom","Philadelphia Phillies",143,"New York Yankees",147
+"2024","2024-07-30",745546,TRUE,"bottom","Philadelphia Phillies",143,"New York Yankees",147
+"2024","2024-07-31",745543,TRUE,"bottom","Philadelphia Phillies",143,"New York Yankees",147
+"2024","2024-08-02",745224,FALSE,"top","Philadelphia Phillies",143,"Seattle Mariners",136
+"2024","2024-08-03",745225,FALSE,"top","Philadelphia Phillies",143,"Seattle Mariners",136
+"2024","2024-08-04",745222,FALSE,"top","Philadelphia Phillies",143,"Seattle Mariners",136
+"2024","2024-08-05",746116,FALSE,"top","Philadelphia Phillies",143,"Los Angeles Dodgers",119
+"2024","2024-08-06",746120,FALSE,"top","Philadelphia Phillies",143,"Los Angeles Dodgers",119
+"2024","2024-08-07",746115,FALSE,"top","Philadelphia Phillies",143,"Los Angeles Dodgers",119
+"2024","2024-08-08",747169,FALSE,"top","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2024","2024-08-09",747168,FALSE,"top","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2024","2024-08-10",747164,FALSE,"top","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2024","2024-08-11",747166,FALSE,"top","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2024","2024-08-13",745548,TRUE,"bottom","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-08-14",745544,TRUE,"bottom","Philadelphia Phillies",143,"Miami Marlins",146
+"2024","2024-08-15",745545,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120
+"2024","2024-08-16",745542,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120

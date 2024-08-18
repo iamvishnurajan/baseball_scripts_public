@@ -1,0 +1,35 @@
+result.event,is.atBat,is.hit
+Bunt Groundout,yes,no
+Bunt Pop Out,yes,no
+Catcher Interference,no,no
+Caught Stealing 2B,no,no
+Caught Stealing 3B,no,no
+Caught Stealing Home,no,no
+Double,yes,yes
+Double Play,yes,no
+Field Error,yes,no
+Fielders Choice,yes,no
+Fielders Choice Out,yes,no
+Flyout,yes,no
+Forceout,yes,no
+Grounded Into DP,yes,no
+Groundout,yes,no
+Hit By Pitch,no,no
+Home Run,yes,yes
+Intent Walk,no,no
+Lineout,yes,no
+Pickoff 1B,no,no
+Pickoff 2B,no,no
+Pickoff 3B,no,no
+Pickoff Caught Stealing 2B,no,no
+Pickoff Caught Stealing Home,no,no
+Pop Out,yes,no
+Runner Out,no,no
+Sac Bunt,no,no
+Sac Fly,no,no
+Single,yes,yes
+Strikeout,yes,no
+Strikeout Double Play,yes,no
+Triple,yes,yes
+Triple Play,yes,no
+Walk,no,no
