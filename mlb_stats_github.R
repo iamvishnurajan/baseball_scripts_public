@@ -1,7 +1,6 @@
 ###
 ###  EXTRACT AND CHARTING OF PHILLIES BY-GAME STATS
 ###  HITTING, PITCHING, AND FIELDING
-###  NOTE: BY-GAME RISP CALCLATIONS ARE MANUAL AND MAY NOT MATCH OFFICIAL STATS
 ###  CODE HERE IS DESIGNED FOR POSTING CHARTS TO BLUESKY.APP
 ###
 
@@ -19,6 +18,7 @@ library(ggrepel)
 library(magick)
 library(scales)
 library(bskyr)
+library(toOrdinal)
 
 ##  USER CONFIGURABLE INPUT PARAMETERS
 
@@ -48,7 +48,7 @@ teams <- jsonlite::fromJSON(jsonlite::toJSON(resp_teams[['teams']]), flatten = T
 teams <- teams[teams$sport.id==1,]
 
 id <- 143
-year <- 2024
+year <- 2025
 
 # Locations of key files that are needed
 
@@ -146,6 +146,7 @@ if (nrow(new_game_diff)> 0) {
   hitting_all_max <- hitting_all[hitting_all$stat.ops==max(hitting_all$stat.ops),c("team.id","team.name","stat.ops")]
   hitting_all_min <- hitting_all[hitting_all$stat.ops==min(hitting_all$stat.ops),c("team.id","team.name","stat.ops")]
   hitting_all_avg <- round(mean(hitting_all$stat.ops),3)
+  hitting_all$order <- rank(-hitting_all$stat.ops,ties.method = c("min"))
   
   stat_group <- "pitching"
   pitching_std <- mlb_game_logs_std(id,stat_group,year)
@@ -165,6 +166,7 @@ if (nrow(new_game_diff)> 0) {
   pitching_all_max <- pitching_all[pitching_all$stat.whip==max(pitching_all$stat.whip),c("team.id","team.name","stat.whip")]
   pitching_all_min <- pitching_all[pitching_all$stat.whip==min(pitching_all$stat.whip),c("team.id","team.name","stat.whip")]
   pitching_all_avg <- round(mean(pitching_all$stat.whip),3)
+  pitching_all$order <- rank(pitching_all$stat.whip,ties.method = c("min"))
   
   stat_group <- "fielding"
   fielding_std <- mlb_game_logs_std(id,stat_group,year)
@@ -184,6 +186,8 @@ if (nrow(new_game_diff)> 0) {
   fielding_all_max <- fielding_all[fielding_all$stat.rangeFactorPer9Inn==max(fielding_all$stat.rangeFactorPer9Inn),c("team.id","team.name","stat.rangeFactorPer9Inn")]
   fielding_all_min <- fielding_all[fielding_all$stat.rangeFactorPer9Inn==min(fielding_all$stat.rangeFactorPer9Inn),c("team.id","team.name","stat.rangeFactorPer9Inn")]
   fielding_all_avg <- round(mean(fielding_all$stat.rangeFactorPer9Inn),2)
+  fielding_std$stat.rangeFactorPer9Inn <- fielding_std$stat.rangeFactorPer9Inn/9
+  fielding_all$order <- rank(-fielding_all$stat.rangeFactorPer9Inn,ties.method = c("min"))
   
   stat_group <- "hitting"
   sit_code <- "risp"
@@ -197,93 +201,56 @@ if (nrow(new_game_diff)> 0) {
   hitting_risp_all_max <- hitting_risp_all[hitting_risp_all$stat.avg==max(hitting_risp_all$stat.avg),c("team.id","team.name","stat.avg")]
   hitting_risp_all_min <- hitting_risp_all[hitting_risp_all$stat.avg==min(hitting_risp_all$stat.avg),c("team.id","team.name","stat.avg")]
   hitting_risp_all_avg <- round(mean(hitting_risp_all$stat.avg),3)
+  hitting_risp_all$order <- rank(-hitting_risp_all$stat.avg,ties.method = c("min"))
   
-  ##  LARGE SEQUENCE FOR PULLING PLAY-BY-PLAY INDIVIDUAL GAME DETAIL
-  ##  THIS IS FOR CALCUATION OF BA WITH RISP BY GAME AS IT DOES NOT SEEM TO BE AVAILABLE OTHERWISE
-  ##  ONLY SEASON-TO-DATE BA WITH RISP APPEARS TO BE AVAILABLE VIA API
-  
-  # We first extract play-by-play data, clean it, add necessary calculated columns, and join it to the existing data.frame
-  # This section is error-prone and is only a best guesstimate of how the situational statistics are calculated by other stat sources
-  # The method itself is self-consistent but will likely have minor differences to other statistical sources
-  # Improvements for this section are welcomed. In particular for how to determine RISP from the MLB play-by-play game logs.
+  ##  SEQUENCE FOR PULLING PLAY-BY-PLAY INDIVIDUAL GAME DETAIL
+  ##  THIS IS FOR CALCUATION OF BA WITH RISP FROM BOX SCORE INFO AS IT DOES NOT EXIST OTHERWISE
   
   game_detail_tbllist <- list()
   for (gidx in 1:nrow(new_game_diff)){
-    url4 <- paste0("https://statsapi.mlb.com/api/v1/game/",new_game_diff[gidx,"game.gamePk"],"/playByPlay")
+    url4 <- paste0("https://statsapi.mlb.com/api/v1/game/",new_game_diff[gidx,"game.gamePk"],"/boxscore")
     resp4 <- url4 %>% baseballr:::mlb_api_call()
-    game_detail <- jsonlite::fromJSON(jsonlite::toJSON(resp4[['allPlays']]), flatten = TRUE)
-    if(!("matchup.postOnFirst.fullName" %in% colnames(game_detail))) {
-      game_detail$matchup.postOnFirst.fullName <- NA;
+    game_detail <- jsonlite::fromJSON(jsonlite::toJSON(resp4[['teams']]), flatten = TRUE)
+    
+    game_detail_simple <- new_game_diff[gidx,c("season","date","game.gamePk","team.name","team.id","opponent.name","opponent.id","isHome","inningLabel")]
+    
+    game_detail_extract <- if(game_detail_simple$isHome=="FALSE"){
+      game_detail$away$info$fieldList[[1]]
+    } else {
+      game_detail$home$info$fieldList[[1]]
     }
-    if(!("matchup.postOnSecond.fullName" %in% colnames(game_detail))) {
-      game_detail$matchup.postOnSecond.fullName <- NA;
+    
+    game_detail_teamrisp <- game_detail_extract[grep("Team RISP", game_detail_extract$label),]
+    game_detail_teamrisp$value <- gsub("\\.","",game_detail_teamrisp$value)
+    
+    if(nrow(game_detail_teamrisp>0)){
+      game_detail_simple$atBat <- as.numeric(strsplit(game_detail_teamrisp$value,"-")[[1]][[3]])
+      game_detail_simple$hit <- as.numeric(strsplit(game_detail_teamrisp$value,"-")[[1]][[1]])
+      game_detail_simple$BA_w_RISP = round(game_detail_simple$hit/game_detail_simple$atBat,3)
+    } else {
+      game_detail_simple$atBat <- 0
+      game_detail_simple$hit <- 0
+      game_detail_simple$BA_w_RISP <- NA
     }
-    if(!("matchup.postOnThird.fullName" %in% colnames(game_detail))) {
-      game_detail$matchup.postOnThird.fullName <- NA;
-    }
-    game_detail$advBase <- ifelse(grepl("stolen",game_detail[,4]),"STOLEN",
-                                  ifelse(grepl("wild",game_detail[,4]),"WILD PITCH",
-                                         ifelse(grepl("passed",game_detail[,4]),"PASSED BALL","NONE")))
-    game_detail_simple <- game_detail[,c("atBatIndex","result.event","result.eventType","result.description",
-                                         "result.rbi","result.awayScore","result.homeScore","about.inning","about.halfInning","count.outs",
-                                         "matchup.batter.id","matchup.batter.fullName","matchup.splits.menOnBase","advBase","matchup.postOnFirst.fullName","matchup.postOnSecond.fullName","matchup.postOnThird.fullName")]
-    game_detail_simple <-
-      game_detail_simple %>%
-      group_by(about.inning,about.halfInning) %>%
-      mutate(matchup.splits.menOnBase = lag(matchup.splits.menOnBase,1,order_by=atBatIndex),
-             matchup.postOnFirst.fullName = lag(matchup.postOnFirst.fullName,1,order_by=atBatIndex),
-             matchup.postOnSecond.fullName = lag(matchup.postOnSecond.fullName,1,order_by=atBatIndex),
-             matchup.postOnThird.fullName = lag(matchup.postOnThird.fullName,1,order_by=atBatIndex))
-    game_detail_simple$matchup.splits.menOnBase <- ifelse(is.na(game_detail_simple$matchup.splits.menOnBase),"Empty",game_detail$matchup.splits.menOnBase)
-    game_detail_simple$season <- new_game_diff$season[gidx]
-    game_detail_simple$date <- new_game_diff$date[gidx]
-    game_detail_simple$game.gamePk <- new_game_diff$game.gamePk[gidx]
-    game_detail_simple$isHome <- new_game_diff$isHome[gidx]
-    game_detail_simple$inningLabel <- new_game_diff$inningLabel[gidx]
-    game_detail_simple$team.name <- new_game_diff$team.name[gidx]
-    game_detail_simple$team.id <- new_game_diff$team.id[gidx]
-    game_detail_simple$opponent.name <- new_game_diff$opponent.name[gidx]
-    game_detail_simple$opponent.id <- new_game_diff$opponent.id[gidx]
-    game_detail_simple <- game_detail_simple[,c("season","date","game.gamePk","isHome","inningLabel","team.name","team.id","opponent.name","opponent.id",
-                                                "atBatIndex","result.event","result.eventType","result.description","result.rbi",
-                                                "result.awayScore","result.homeScore","about.inning","about.halfInning","count.outs","matchup.batter.id",
-                                                "matchup.batter.fullName","matchup.splits.menOnBase","advBase","matchup.postOnFirst.fullName","matchup.postOnSecond.fullName","matchup.postOnThird.fullName")]
+    
     game_detail_tbllist[[gidx]] <- game_detail_simple
     Sys.sleep(3)
   }
   
   game_detail_new <- rbindlist(game_detail_tbllist[1:length(game_detail_tbllist)],fill=TRUE)
-  game_detail_new <- game_detail_new[game_detail_new$inningLabel==game_detail_new$about.halfInning,]
-  game_detail_new <- merge(game_detail_new,result_event_lookup,by="result.event")
-  game_detail_new <- game_detail_new[,c("season","date","game.gamePk","isHome","inningLabel","team.name","team.id","opponent.name","opponent.id",
-                                        "atBatIndex","result.event","result.eventType","result.description","result.rbi",
-                                        "result.awayScore","result.homeScore","about.inning","about.halfInning","count.outs","matchup.batter.id",
-                                        "matchup.batter.fullName","matchup.splits.menOnBase","advBase","matchup.postOnFirst.fullName","matchup.postOnSecond.fullName","matchup.postOnThird.fullName",
-                                        "is.atBat","is.hit")]
-  game_detail_new$risp.calc <- ifelse((game_detail_new$advBase!="NONE"|!is.na(game_detail_new$matchup.postOnSecond.fullName)|!is.na(game_detail_new$matchup.postOnThird.fullName)),"yes","no")
-  game_detail_new <- game_detail_new[order(game_detail_new$date,game_detail_new$game.gamePk,game_detail_new$atBatIndex),]
   game_detail_new$season <- as.integer(game_detail_new$season)
-  
   game_detail_full <- bind_rows(game_detail_full_df0,game_detail_new)
   
-  # With the full data.frame assembled we now run create a BA with RISP game log
-  
-  game_log_risp_detail <- game_detail_full[game_detail_full$risp.calc=="yes",]
-  game_log_risp <-
-    game_log_risp_detail %>%
-    group_by(season,date,game.gamePk,team.name,team.id,opponent.name,opponent.id,isHome,inningLabel,) %>%
-    summarise(atBat = sum(is.atBat=="yes"),
-              hit = sum(is.hit=="yes"),
-              BA_w_RISP = round(hit/atBat,3))
+  game_log_risp <- game_detail_full
   game_log_risp$date <- as.Date(game_log_risp$date)
-    
+  
   ##  WE NOW HAVE ALL DATA.FRAMES AND STATISTICS CALCULATED
   ##  THE FOLLOWING IS FOR FORMATTING OF DATA.FRAMES FOR EASE OF CHARTING AND ACTUAL CHARTING 
-
+  
   Sys.sleep(3)
   
   baseball_chart_file <- 0
-
+  
   hitting_max_date <- max(hitting_std$date)
   hitting_min_date <- min(hitting_std$date)
   hitting_team_value <- round(hitting_all[hitting_all$team.id==id,"stat.ops"],3)
@@ -294,7 +261,7 @@ if (nrow(new_game_diff)> 0) {
   hitting_min_label <- paste0("Worst Season Avg: ",paste0(hitting_all_min$team.name,collapse=",")," [",sprintf("%.3f",hitting_min_value),"]")
   hitting_trend <- 
     hitting_std %>% ggplot() + 
-    scale_x_date(date_breaks = "1 week",date_labels = "%b %d") +
+    scale_x_date(breaks = pretty(hitting_std$date,n=25),date_labels = "%b %d") +
     geom_line(aes(x=date,y=stat.ops),linewidth=1.25,alpha=0.1,color="#6F263D",show.legend = FALSE) +
     geom_point(aes(x=date,y=stat.ops),color="#6F263D",alpha=0.1,show.legend = FALSE) +
     stat_smooth(aes(x=date,y=stat.ops),color="#6F263D",method = "loess",formula=y~x,size=0.5) +
@@ -307,9 +274,10 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=hitting_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=hitting_min_date,y=hitting_all_avg,label=paste0("League Avg: ",sprintf("%.3f",hitting_all_avg))),data=hitting_all_max[1,],size=3.25,hjust=0,vjust=0.5,fontface="bold",col="gray30") +
     geom_vline(xintercept=injury_log$date,linetype="dashed",col=injury_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=0.25,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
-    scale_y_continuous(breaks = pretty(hitting_std$stat.ops,n=10)) +
+    geom_text_repel(aes(x=date,y=min(pretty(c(hitting_all$stat.ops,hitting_std$stat.ops),n=10))-0.15,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
+    scale_y_continuous(breaks = pretty(c(hitting_all$stat.ops,hitting_std$stat.ops),n=10)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
+    labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Hitting: On-Base Plus Slugging (OPS)\n")) +
     labs(title=paste0("[Hitting] On-Base Plus Slugging (OPS): ",format(hitting_max_date,"%b %d, %Y"),"\n(Higher is better, red = player out, green = player back in)\n")) +
     theme(plot.title = element_text(hjust = 0.5,face="bold",size="12"),
@@ -320,6 +288,8 @@ if (nrow(new_game_diff)> 0) {
           axis.title = element_text(face="bold",size="12"),
           plot.tag = element_text(hjust=1,vjust=0,face="bold",size="8"),
           plot.tag.position = c(1,0),
+          plot.caption = element_text(hjust=0,vjust=0,face="bold",size="8"),
+          plot.caption.position = "plot",
           panel.background = element_rect(fill='white',color="black"),
           panel.grid.major = element_line(color = "gray90"))
   baseball_chart_file[1] <- paste0(img_dir,"hitting_",hitting_max_date,".png")
@@ -337,7 +307,7 @@ if (nrow(new_game_diff)> 0) {
   pitching_min_label <- paste0("Best Season Avg: ",paste0(pitching_all_min$team.name,collapse=",")," [",sprintf("%.3f",pitching_min_value),"]")
   pitching_trend <- 
     pitching_std %>% ggplot() + 
-    scale_x_date(date_breaks = "1 week",date_labels = "%b %d") +
+    scale_x_date(breaks = pretty(pitching_std$date,n=25),date_labels = "%b %d") +
     geom_line(aes(x=date,y=stat.whip),linewidth=1.25,alpha=0.1,color="#6F263D",show.legend = FALSE) +
     geom_point(aes(x=date,y=stat.whip),color="#6F263D",alpha=0.1,show.legend = FALSE) +
     stat_smooth(aes(x=date,y=stat.whip),color="#6F263D",method = "loess",formula=y~x,size=0.5) +
@@ -350,9 +320,10 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=pitching_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=pitching_min_date,y=pitching_all_avg,label=paste0("League Avg: ",sprintf("%.3f",pitching_all_avg))),data=pitching_all_max[1,],size=3.25,hjust=0,vjust=1,fontface="bold",col="gray30") +
     geom_vline(xintercept=injuryp_log$date,linetype="dashed",col=injuryp_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=0.15,label=player,angle=90),data=injuryp_log,size=3.25,vjust=0,fontface="bold",col=injuryp_log$status) +
-    scale_y_continuous(breaks = pretty(pitching_std$stat.whip,n=10)) +
+    geom_text_repel(aes(x=date,y=min(pretty(c(pitching_all$stat.whip,pitching_std$stat.whip),n=10))-0.15,label=player,angle=90),data=injuryp_log,size=3.25,vjust=0,fontface="bold",col=injuryp_log$status) +
+    scale_y_continuous(breaks = pretty(c(pitching_all$stat.whip,pitching_std$stat.whip),n=10)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
+    labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Pitching: Walks and Hits Per Inning Pitched (WHIP)\n")) +
     labs(title=paste0("[Pitching] Walks and Hits Per Inning Pitched (WHIP): ",format(pitching_max_date,"%b %d, %Y"),"\n(Lower is better, red = player out, green = player back in)\n")) +
     theme(plot.title = element_text(hjust = 0.5,face="bold",size="12"),
@@ -363,6 +334,8 @@ if (nrow(new_game_diff)> 0) {
           axis.title = element_text(face="bold",size="12"),
           plot.tag = element_text(hjust=1,vjust=0,face="bold",size="8"),
           plot.tag.position = c(1,0),
+          plot.caption = element_text(hjust=0,vjust=0,face="bold",size="8"),
+          plot.caption.position = "plot",
           panel.background = element_rect(fill='white',color="black"),
           panel.grid.major = element_line(color = "gray90"))
   baseball_chart_file[2] <- paste0(img_dir,"pitching_",pitching_max_date,".png")
@@ -380,7 +353,7 @@ if (nrow(new_game_diff)> 0) {
   fielding_min_label <- paste0("Worst Season Avg: ",paste0(fielding_all_min$team.name,collapse=",")," [",sprintf("%.2f",fielding_min_value),"]")
   fielding_trend <- 
     fielding_std %>% ggplot() + 
-    scale_x_date(date_breaks = "1 week",date_labels = "%b %d") +
+    scale_x_date(breaks = pretty(fielding_std$date,n=25),date_labels = "%b %d") +
     geom_line(aes(x=date,y=stat.rangeFactorPer9Inn),linewidth=1.25,alpha=0.1,color="#6F263D",show.legend = FALSE) +
     geom_point(aes(x=date,y=stat.rangeFactorPer9Inn),color="#6F263D",alpha=0.1,show.legend = FALSE) +
     stat_smooth(aes(x=date,y=stat.rangeFactorPer9Inn),color="#6F263D",method = "loess",formula=y~x,size=0.5) +
@@ -393,9 +366,10 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=fielding_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=fielding_min_date,y=fielding_all_avg,label=paste0("League Avg: ",sprintf("%.3f",fielding_all_avg))),data=fielding_all_max[1,],size=3.25,hjust=0,vjust=0,fontface="bold",col="gray30") +
     geom_vline(xintercept=injury_log$date,linetype="dashed",col=injury_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=3,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
-    scale_y_continuous(breaks = pretty(fielding_std$stat.rangeFactorPer9Inn,n=10)) +
+    geom_text_repel(aes(x=date,y=min(pretty(c(fielding_all$stat.rangeFactorPer9Inn,fielding_std$stat.rangeFactorPer9Inn),n=10))-0.1,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
+    scale_y_continuous(breaks = pretty(c(fielding_all$stat.rangeFactorPer9Inn,fielding_std$stat.rangeFactorPer9Inn),n=10)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
+    labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Fielding: Range Factor Per 9 Innings\n")) +
     labs(title=paste0("[Fielding] Range Factor Per 9 Innings: ",format(fielding_max_date,"%b %d, %Y"),"\n(Higher is better, red = player out, green = player back in)\n")) +
     theme(plot.title = element_text(hjust = 0.5,face="bold",size="12"),
@@ -406,6 +380,8 @@ if (nrow(new_game_diff)> 0) {
           axis.title = element_text(face="bold",size="12"),
           plot.tag = element_text(hjust=1,vjust=0,face="bold",size="8"),
           plot.tag.position = c(1,0),
+          plot.caption = element_text(hjust=0,vjust=0,face="bold",size="8"),
+          plot.caption.position = "plot",
           panel.background = element_rect(fill='white',color="black"),
           panel.grid.major = element_line(color = "gray90"))
   baseball_chart_file[3] <- paste0(img_dir,"fielding_",fielding_max_date,".png")
@@ -424,7 +400,7 @@ if (nrow(new_game_diff)> 0) {
   barisp_min_label <- paste0("Worst Season Avg: ",paste0(hitting_risp_all_min$team.name,collapse=",")," [",sprintf("%.3f",barisp_min_value),"]")
   barisp_trend <- 
     game_log_risp %>% ggplot() + 
-    scale_x_date(date_breaks = "1 week",date_labels = "%b %d") +
+    scale_x_date(breaks = pretty(game_log_risp$date,n=25),date_labels = "%b %d") +
     geom_line(aes(x=date,y=BA_w_RISP),linewidth=1.25,alpha=0.1,color="#6F263D",show.legend = FALSE) +
     geom_point(aes(x=date,y=BA_w_RISP,color=qualified),alpha=0.1,show.legend = FALSE) +
     stat_smooth(aes(x=date,y=BA_w_RISP),color="#6F263D",method = "loess",formula=y~x,size=0.5) +
@@ -438,11 +414,12 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=hitting_risp_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=barisp_min_date,y=hitting_risp_all_avg,label=paste0("League Avg: ",sprintf("%.3f",hitting_risp_all_avg))),data=fielding_all_max[1,],size=3.25,hjust=0,vjust=0,fontface="bold",col="gray30") +
     geom_vline(xintercept=injury_log$date,linetype="dashed",col=injury_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=0,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
-    coord_cartesian(ylim = c(0,0.4)) +
+    geom_text_repel(aes(x=date,y=min(pretty(c(hitting_risp_all$stat.avg,game_log_risp$BA_w_RISP),n=10))-0.05,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
+    scale_y_continuous(breaks = pretty(c(hitting_risp_all$stat.avg,game_log_risp$BA_w_RISP),n=10)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
+    labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Hitting: Batting Avg. w/ Runners in Scoring Position\n")) +
-    labs(title=paste0("**BETA**\n[Hitting] Batting Avg. w./ Runners in Scoring Position: ",format(barisp_max_date,"%b %d, %Y"),"\nNote: Games with less than 3 qualifying at-bats in gray\n(Higher is better, red = player out, green = player back in)\n")) +
+    labs(title=paste0("[Hitting] Batting Avg. w./ Runners in Scoring Position: ",format(barisp_max_date,"%b %d, %Y"),"\nNote: Games with less than 3 qualifying at-bats in gray\n(Higher is better, red = player out, green = player back in)\n")) +
     theme(plot.title = element_text(hjust = 0.5,face="bold",size="12"),
           strip.text.x = element_text(face="bold",size="10"),
           axis.text.x = element_text(angle=90,size="12"),
@@ -451,6 +428,8 @@ if (nrow(new_game_diff)> 0) {
           axis.title = element_text(face="bold",size="12"),
           plot.tag = element_text(hjust=1,vjust=0,face="bold",size="8"),
           plot.tag.position = c(1,0),
+          plot.caption = element_text(hjust=0,vjust=0,face="bold",size="8"),
+          plot.caption.position = "plot",
           panel.background = element_rect(fill='white',color="black"),
           panel.grid.major = element_line(color = "gray90"))
   baseball_chart_file[4] <- paste0(img_dir,"barisp_",barisp_max_date,".png")
@@ -460,7 +439,12 @@ if (nrow(new_game_diff)> 0) {
   
   Sys.sleep(3)
   
-  bstext <- paste0("*Automated Post*\n\nPhiladelphia Phillies Daily Stat Charts\nMost recent game date: ",hitting_max_date,"\n\nNote: Batting Avg. w/ RISP is beta and manually calculated as it does not exist by-game from MLB")
+  rank_text <- paste0("OPS Rank: ",toOrdinal(hitting_all$order[hitting_all$team.id==143]),
+                      "\nBA w/ RISP: ",toOrdinal(hitting_risp_all$order[hitting_risp_all$team.id==143]),
+                      "\nWHIP: ",toOrdinal(pitching_all$order[pitching_all$team.id==143]),
+                      "\nFielding Range Factor: ",toOrdinal(fielding_all$order[fielding_all$team.id==143]))
+  
+  bstext <- paste0("*Automated Post*\n\nPhiladelphia Phillies Daily Stat Charts\nMost recent game date: ",format(hitting_max_date,"%b %d, %Y"),"\n\n",rank_text)
   
   bs_post(
     text = bstext, 
