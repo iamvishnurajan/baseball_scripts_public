@@ -6,13 +6,9 @@ Charts are time trend (game log based) for OPS, Batting Avg w/ RISP, WHIP, and F
 
 When deploying, you must edit the R code to set variables in the "USER CONFIGURABLE INPUT PARAMETERS" section
 
-Please note:
-- Batting Avg w/ RISP is manually calculated as this does not seem to be available via MLB API in a game log form
-- As noted in the code, that section of code may be error prone and is only a a best guesstimate of how the situational statistics are calculated. The method itself is self-consistent but will likely have minor differences to other statistical sources.
-- Improvements for that section are welcomed.
-
 Questions? Bugs? Feel free to reach out.
 
+Note: The example charts below are from the 2024 season. There are minor cosmetic updates in 2025. Also, Batting Avg w/ RISP is also no longer in beta as it is now directly from box score info (it was previously manually calculated).
 
 ![bafkreifbfi7mb43njjannymy4rydemzgfth7kptywrgh432h4bkdd4xx5e](https://github.com/user-attachments/assets/3c7626ff-5391-4a96-8b34-b651931577b2)
 
