@@ -259,6 +259,9 @@ if (nrow(new_game_diff)> 0) {
   hitting_max_label <- paste0("Best Season Avg: ",paste0(hitting_all_max$team.name,collapse=",")," [",sprintf("%.3f",hitting_max_value),"]")
   hitting_min_value <- round(unique(hitting_all_min$stat.ops),3)
   hitting_min_label <- paste0("Worst Season Avg: ",paste0(hitting_all_min$team.name,collapse=",")," [",sprintf("%.3f",hitting_min_value),"]")
+  hitting_scale_max <- max(pretty(c(hitting_all$stat.ops,hitting_std$stat.ops),n=10))
+  hitting_scale_min <- min(pretty(c(hitting_all$stat.ops,hitting_std$stat.ops),n=10))
+  hitting_scale_range <- hitting_scale_max - hitting_scale_min
   hitting_trend <- 
     hitting_std %>% ggplot() + 
     scale_x_date(breaks = pretty(hitting_std$date,n=25),date_labels = "%b %d") +
@@ -274,8 +277,9 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=hitting_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=hitting_min_date,y=hitting_all_avg,label=paste0("League Avg: ",sprintf("%.3f",hitting_all_avg))),data=hitting_all_max[1,],size=3.25,hjust=0,vjust=0.5,fontface="bold",col="gray30") +
     geom_vline(xintercept=injury_log$date,linetype="dashed",col=injury_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=min(pretty(c(hitting_all$stat.ops,hitting_std$stat.ops),n=10))-0.15,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
+    geom_text_repel(aes(x=date,y=hitting_scale_min-0.5*hitting_scale_range,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
     scale_y_continuous(breaks = pretty(c(hitting_all$stat.ops,hitting_std$stat.ops),n=10)) +
+    coord_cartesian(ylim=c(hitting_scale_min-0.5*hitting_scale_range,hitting_scale_max+0.05*hitting_scale_range)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
     labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Hitting: On-Base Plus Slugging (OPS)\n")) +
@@ -305,6 +309,9 @@ if (nrow(new_game_diff)> 0) {
   pitching_max_label <- paste0("Worst Season Avg: ",paste0(pitching_all_max$team.name,collapse=",")," [",sprintf("%.3f",pitching_max_value),"]")
   pitching_min_value <- round(unique(pitching_all_min$stat.whip),3)
   pitching_min_label <- paste0("Best Season Avg: ",paste0(pitching_all_min$team.name,collapse=",")," [",sprintf("%.3f",pitching_min_value),"]")
+  pitching_scale_max <- max(pretty(c(pitching_all$stat.whip,pitching_std$stat.whip),n=10))
+  pitching_scale_min <- min(pretty(c(pitching_all$stat.whip,pitching_std$stat.whip),n=10))
+  pitching_scale_range <- pitching_scale_max - pitching_scale_min
   pitching_trend <- 
     pitching_std %>% ggplot() + 
     scale_x_date(breaks = pretty(pitching_std$date,n=25),date_labels = "%b %d") +
@@ -320,8 +327,9 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=pitching_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=pitching_min_date,y=pitching_all_avg,label=paste0("League Avg: ",sprintf("%.3f",pitching_all_avg))),data=pitching_all_max[1,],size=3.25,hjust=0,vjust=1,fontface="bold",col="gray30") +
     geom_vline(xintercept=injuryp_log$date,linetype="dashed",col=injuryp_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=min(pretty(c(pitching_all$stat.whip,pitching_std$stat.whip),n=10))-0.15,label=player,angle=90),data=injuryp_log,size=3.25,vjust=0,fontface="bold",col=injuryp_log$status) +
+    geom_text_repel(aes(x=date,y=pitching_scale_min-0.5*pitching_scale_range,label=player,angle=90),data=injuryp_log,size=3.25,vjust=0,fontface="bold",col=injuryp_log$status) +
     scale_y_continuous(breaks = pretty(c(pitching_all$stat.whip,pitching_std$stat.whip),n=10)) +
+    coord_cartesian(ylim=c(pitching_scale_min-0.5*pitching_scale_range,pitching_scale_max+0.05*pitching_scale_range)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
     labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Pitching: Walks and Hits Per Inning Pitched (WHIP)\n")) +
@@ -351,6 +359,9 @@ if (nrow(new_game_diff)> 0) {
   fielding_max_label <- paste0("Best Season Avg: ",paste0(fielding_all_max$team.name,collapse=",")," [",sprintf("%.2f",fielding_max_value),"]")
   fielding_min_value <- round(unique(fielding_all_min$stat.rangeFactorPer9Inn),2)
   fielding_min_label <- paste0("Worst Season Avg: ",paste0(fielding_all_min$team.name,collapse=",")," [",sprintf("%.2f",fielding_min_value),"]")
+  fielding_scale_max <- max(pretty(c(fielding_all$stat.rangeFactorPer9Inn,fielding_std$stat.rangeFactorPer9Inn),n=10))
+  fielding_scale_min <- min(pretty(c(fielding_all$stat.rangeFactorPer9Inn,fielding_std$stat.rangeFactorPer9Inn),n=10))
+  fielding_scale_range <- fielding_scale_max - fielding_scale_min
   fielding_trend <- 
     fielding_std %>% ggplot() + 
     scale_x_date(breaks = pretty(fielding_std$date,n=25),date_labels = "%b %d") +
@@ -366,8 +377,9 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=fielding_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=fielding_min_date,y=fielding_all_avg,label=paste0("League Avg: ",sprintf("%.3f",fielding_all_avg))),data=fielding_all_max[1,],size=3.25,hjust=0,vjust=0,fontface="bold",col="gray30") +
     geom_vline(xintercept=injury_log$date,linetype="dashed",col=injury_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=min(pretty(c(fielding_all$stat.rangeFactorPer9Inn,fielding_std$stat.rangeFactorPer9Inn),n=10))-0.1,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
+    geom_text_repel(aes(x=date,y=fielding_scale_min-0.5*fielding_scale_range,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
     scale_y_continuous(breaks = pretty(c(fielding_all$stat.rangeFactorPer9Inn,fielding_std$stat.rangeFactorPer9Inn),n=10)) +
+    coord_cartesian(ylim=c(fielding_scale_min-0.5*fielding_scale_range,fielding_scale_max+0.05*fielding_scale_range)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
     labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Fielding: Range Factor Per 9 Innings\n")) +
@@ -398,6 +410,9 @@ if (nrow(new_game_diff)> 0) {
   barisp_max_label <- paste0("Best Season Avg: ",paste0(hitting_risp_all_max$team.name,collapse=",")," [",sprintf("%.3f",barisp_max_value),"]")
   barisp_min_value <- round(unique(hitting_risp_all_min$stat.avg),3)
   barisp_min_label <- paste0("Worst Season Avg: ",paste0(hitting_risp_all_min$team.name,collapse=",")," [",sprintf("%.3f",barisp_min_value),"]")
+  barisp_scale_max <- max(pretty(c(hitting_risp_all$stat.avg,game_log_risp$BA_w_RISP),n=10))
+  barisp_scale_min <- min(pretty(c(hitting_risp_all$stat.avg,game_log_risp$BA_w_RISP),n=10))
+  barisp_scale_range <- barisp_scale_max - barisp_scale_min
   barisp_trend <- 
     game_log_risp %>% ggplot() + 
     scale_x_date(breaks = pretty(game_log_risp$date,n=25),date_labels = "%b %d") +
@@ -414,8 +429,9 @@ if (nrow(new_game_diff)> 0) {
     geom_hline(yintercept=hitting_risp_all_avg,linetype="dashed",col="gray30") +
     geom_text_repel(aes(x=barisp_min_date,y=hitting_risp_all_avg,label=paste0("League Avg: ",sprintf("%.3f",hitting_risp_all_avg))),data=fielding_all_max[1,],size=3.25,hjust=0,vjust=0,fontface="bold",col="gray30") +
     geom_vline(xintercept=injury_log$date,linetype="dashed",col=injury_log$status,alpha=0.5) +
-    geom_text_repel(aes(x=date,y=min(pretty(c(hitting_risp_all$stat.avg,game_log_risp$BA_w_RISP),n=10))-0.05,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
+    geom_text_repel(aes(x=date,y=barisp_scale_min-0.5*barisp_scale_range,label=player,angle=90),data=injury_log,size=3.25,vjust=0,fontface="bold",col=injury_log$status) +
     scale_y_continuous(breaks = pretty(c(hitting_risp_all$stat.avg,game_log_risp$BA_w_RISP),n=10)) +
+    coord_cartesian(ylim=c(barisp_scale_min-0.5*barisp_scale_range,barisp_scale_max+0.05*barisp_scale_range)) +
     labs(x="\nDate",tag="Source: https://statsapi.mlb.com\n@iamvishnurajan.bsky.social") +
     labs(caption="Note: Fit line based on LOESS algorithm") +
     ylab(paste0("Hitting: Batting Avg. w/ Runners in Scoring Position\n")) +
