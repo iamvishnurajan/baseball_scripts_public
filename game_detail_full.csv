@@ -1,5 +1,2 @@
-"season","date","game.gamePk","team.name","team.id","opponent.name","opponent.id","isHome","inningLabel","atBat","hit","BA_w_RISP"
-2025,"2025-03-27",778555,"Philadelphia Phillies",143,"Washington Nationals",120,FALSE,"top",11,3,0.273
-2025,"2025-03-29",778535,"Philadelphia Phillies",143,"Washington Nationals",120,FALSE,"top",12,5,0.417
-2025,"2025-03-30",778526,"Philadelphia Phillies",143,"Washington Nationals",120,FALSE,"top",9,0,0
-2025,"2025-03-31",778502,"Philadelphia Phillies",143,"Colorado Rockies",115,TRUE,"bottom",5,2,0.4
+"season","date","game.gamePk","isHome","inningLabel","team.name","team.id","opponent.name","opponent.id","atBatIndex","result.event","result.eventType","result.description","result.rbi","result.awayScore","result.homeScore","about.inning","about.halfInning","count.outs","matchup.batter.id","matchup.batter.fullName","matchup.splits.menOnBase","advBase","matchup.postOnFirst.fullName","matchup.postOnSecond.fullName","matchup.postOnThird.fullName","is.atBat","is.hit","risp.calc"
+

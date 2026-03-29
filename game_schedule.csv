@@ -1,5 +1,2 @@
-"season","date","game.gamePk","isHome","inningLabel","team.name","team.id","opponent.name","opponent.id"
-"2025","2025-03-27",778555,FALSE,"top","Philadelphia Phillies",143,"Washington Nationals",120
-"2025","2025-03-29",778535,FALSE,"top","Philadelphia Phillies",143,"Washington Nationals",120
-"2025","2025-03-30",778526,FALSE,"top","Philadelphia Phillies",143,"Washington Nationals",120
-"2025","2025-03-31",778502,TRUE,"bottom","Philadelphia Phillies",143,"Colorado Rockies",115
+season, date, game.gamePk, isHome, inningLabel, team.name, team.id, opponent.name, opponent.id
+
