@@ -236,6 +236,8 @@ if (nrow(new_game_diff)> 0) {
   
   player_pitching_new <- rbindlist(player_pitching_tbllist[1:length(player_pitching_tbllist)],fill=TRUE)
   player_pitching_new$season <- as.integer(player_pitching_new$season)
+  player_pitching_new$stat.homeRunsPer9 <- as.numeric(player_pitching_new$stat.homeRunsPer9)
+  player_pitching_new$stat.runsScoredPer9 <- as.numeric(player_pitching_new$stat.runsScoredPer9)
   player_pitching_new$stat.inningsPitched <- as.numeric(player_pitching_new$stat.inningsPitched)
   player_pitching_new$stat.inningsPitched <- floor(player_pitching_new$stat.inningsPitched)+10*(player_pitching_new$stat.inningsPitched-floor(player_pitching_new$stat.inningsPitched))/3
   
