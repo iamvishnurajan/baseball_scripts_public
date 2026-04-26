@@ -1,2 +1,28 @@
-season, date, game.gamePk, isHome, inningLabel, team.name, team.id, opponent.name, opponent.id
-
+"season","date","game.gamePk","isHome","inningLabel","team.name","team.id","opponent.name","opponent.id"
+"2026","2026-03-26",823486,TRUE,"bottom","Philadelphia Phillies",143,"Texas Rangers",140
+"2026","2026-03-28",823488,TRUE,"bottom","Philadelphia Phillies",143,"Texas Rangers",140
+"2026","2026-03-29",823487,TRUE,"bottom","Philadelphia Phillies",143,"Texas Rangers",140
+"2026","2026-03-30",823484,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120
+"2026","2026-03-31",823485,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120
+"2026","2026-04-01",823483,TRUE,"bottom","Philadelphia Phillies",143,"Washington Nationals",120
+"2026","2026-04-03",824377,FALSE,"top","Philadelphia Phillies",143,"Colorado Rockies",115
+"2026","2026-04-04",824378,FALSE,"top","Philadelphia Phillies",143,"Colorado Rockies",115
+"2026","2026-04-05",824379,FALSE,"top","Philadelphia Phillies",143,"Colorado Rockies",115
+"2026","2026-04-06",823237,FALSE,"top","Philadelphia Phillies",143,"San Francisco Giants",137
+"2026","2026-04-07",823235,FALSE,"top","Philadelphia Phillies",143,"San Francisco Giants",137
+"2026","2026-04-08",823234,FALSE,"top","Philadelphia Phillies",143,"San Francisco Giants",137
+"2026","2026-04-10",823482,TRUE,"bottom","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2026","2026-04-11",823480,TRUE,"bottom","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2026","2026-04-12",823479,TRUE,"bottom","Philadelphia Phillies",143,"Arizona Diamondbacks",109
+"2026","2026-04-13",823481,TRUE,"bottom","Philadelphia Phillies",143,"Chicago Cubs",112
+"2026","2026-04-14",823478,TRUE,"bottom","Philadelphia Phillies",143,"Chicago Cubs",112
+"2026","2026-04-15",823477,TRUE,"bottom","Philadelphia Phillies",143,"Chicago Cubs",112
+"2026","2026-04-17",823476,TRUE,"bottom","Philadelphia Phillies",143,"Atlanta Braves",144
+"2026","2026-04-18",823474,TRUE,"bottom","Philadelphia Phillies",143,"Atlanta Braves",144
+"2026","2026-04-19",823475,TRUE,"bottom","Philadelphia Phillies",143,"Atlanta Braves",144
+"2026","2026-04-20",824692,FALSE,"top","Philadelphia Phillies",143,"Chicago Cubs",112
+"2026","2026-04-21",824690,FALSE,"top","Philadelphia Phillies",143,"Chicago Cubs",112
+"2026","2026-04-22",824688,FALSE,"top","Philadelphia Phillies",143,"Chicago Cubs",112
+"2026","2026-04-23",824689,FALSE,"top","Philadelphia Phillies",143,"Chicago Cubs",112
+"2026","2026-04-24",824932,FALSE,"top","Philadelphia Phillies",143,"Atlanta Braves",144
+"2026","2026-04-25",824933,FALSE,"top","Philadelphia Phillies",143,"Atlanta Braves",144
